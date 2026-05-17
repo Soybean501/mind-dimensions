@@ -20,38 +20,33 @@ The app uses a custom "Atlas of the interior" design system: cosmic dark theme w
 - **Dimension** — A named axis. Defined in `src/data/dimensions.js`. Each has: `id`, `code` (2-letter), `name`, `tagline`, `description`, `poles.lo`/`poles.hi` (each with `code` + `label`), `hue` (OKLCH hue used for the dimension's accent colour), `research` citation, and `facets`.
 - **Population data** lives alongside each dimension (`POPULATION[id]`) with `mean`, `sd`, and `mode` (e.g. `'bimodal'`, `'left-skewed'`).
 - **Quiz** — A sequence of likert / forced-choice / calibration-slider items. Currently a single shared `QUIZ_INNER_SPEECH` bank is wired up; per-dimension banks are TODO.
-- **Profile** — User scores, percentiles, journal entries, and metadata. Pinia store at `src/stores/profile.js`. Starts blank (no name, no completed dimensions, midpoint scores) until results are written.
-- **Tweaks** — Live theme/density/sidebar toggles via `src/composables/useTweaks.js`, surfaced through the floating `TweaksPanel` component.
+- **Profile** — User scores, percentiles, and metadata. Pinia store at `src/stores/profile.js`. Starts blank (no name, no completed dimensions, midpoint scores) until results are written.
 
 ## Project structure
 
 ```
 src/
-  App.vue                       # Shell: sidebar + router-view + tweaks panel
+  App.vue                       # Shell: sidebar + router-view
   main.js                       # Pinia + Router setup
   style.css                     # Design tokens, animations, button + card primitives
   router/index.js               # Hash-history routes
   stores/profile.js             # Pinia store for the user's profile
   data/dimensions.js            # DIMENSIONS, POPULATION, LIKERT_LABELS, interpretFor()
   composables/
-    useTweaks.js                # Theme/density/nav state
     useStarfield.js             # Canvas starfield + shooting stars + nebula
   components/
     Sidebar.vue                 # Left nav, profile chip, dimension switcher
-    TweaksPanel.vue             # Floating dev/design tweaks
     DimensionCard.vue           # Card used on the dashboard grid
-    atoms/                      # Reusable visual atoms (RadarChart, Fingerprint, …)
+    atoms/                      # CodeBadge, ConstellationField, DistributionCurve,
+                                # GlowDot, RadarChart, ScaleMeter, Wordmark
     quiz/                       # LikertScale, ForcedChoice, CalibrationSlider
   views/
     LandingView.vue             # Marketing landing page
-    OnboardingView.vue          # First-run calibration flow
-    DashboardView.vue           # Atlas home
+    DashboardView.vue           # Atlas home — grid of dimensions
     DimensionView.vue           # Per-dimension explainer + result summary
     QuizView.vue                # Assessment flow
     ResultView.vue              # Post-assessment summary
-    ProfileView.vue             # Full atlas with 4 viz modes (radar, space, bars, fingerprint)
-    ComparisonView.vue          # Population comparison
-    JournalView.vue             # Tagged notes
+    ProfileView.vue             # Full atlas: radar + per-dimension grid
 ```
 
 ## Conventions
@@ -71,7 +66,6 @@ npm run preview  # preview the production build
 
 ## What's wired vs. what isn't
 
-- All views, routing, sidebar, tweaks panel, animations, and visualisations work end-to-end with blank profile data.
+- All views, routing, sidebar, animations, and visualisations work end-to-end with blank profile data.
 - The **quiz** captures answers locally but does not yet score back into the profile store. `QUIZ_INNER_SPEECH` is used for every dimension as a placeholder bank.
 - The **profile store** starts blank; no scoring pipeline writes to it yet. The midpoint (0.5) is used as the placeholder value for charts.
-- **Onboarding** flows through calibration steps but the captured values are not persisted.

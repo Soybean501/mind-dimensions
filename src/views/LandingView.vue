@@ -17,31 +17,22 @@ const profile = useProfile()
     <div style="position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:40px 56px 80px">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:80px">
         <Wordmark />
-        <nav style="display:flex; gap:28px; color: var(--text-mute); font-size:13.5px">
-          <a>Atlas</a><a>Research</a><a>Methodology</a><a>Journal</a>
-        </nav>
-        <div style="display:flex; gap:10px">
-          <button class="btn btn-ghost">Sign in</button>
-          <button class="btn btn-primary" @click="router.push({ name: 'onboarding' })">Begin atlas</button>
-        </div>
+        <button class="btn btn-primary" @click="router.push({ name: 'dashboard' })">Begin atlas</button>
       </div>
 
       <div style="display:grid; grid-template-columns:1.05fr 0.95fr; gap:80px; align-items:center; margin-bottom:120px">
         <div class="fade-up">
-          <div class="micro" style="margin-bottom:24px">v0.1 · ATLAS MK-1 · 6 DIMENSIONS</div>
+          <div class="micro" style="margin-bottom:24px">ATLAS · {{ DIMENSIONS.length }} DIMENSIONS</div>
           <h1 class="serif" style="margin:0; font-size:88px; line-height:0.96; font-weight:400; letter-spacing:-0.025em">
             Your mind has<br/>
             <em style="color: var(--accent)">coordinates</em>.
           </h1>
           <p style="margin-top:32px; font-size:19px; line-height:1.45; color: var(--text-mute); max-width:520px">
-            Cognitype is an atlas for the interior. Take guided assessments across six dimensions of cognition — inner speech, mental imagery, wordless thought, systemising drive, processing style, sensory vividness — and find where your mind sits in the space of possible minds.
+            Cognitype is an atlas for the interior. Take guided assessments across {{ DIMENSIONS.length }} dimensions of cognition — inner speech, mental imagery, wordless thought, systemising drive, processing style, sensory vividness — and find where your mind sits in the space of possible minds.
           </p>
           <div style="display:flex; gap:12px; margin-top:36px">
-            <button class="btn btn-primary" style="padding:14px 24px; font-size:14.5px" @click="router.push({ name: 'onboarding' })">
+            <button class="btn btn-primary" style="padding:14px 24px; font-size:14.5px" @click="router.push({ name: 'dashboard' })">
               Map my mind <span class="mono" style="opacity:0.5">→</span>
-            </button>
-            <button class="btn" style="padding:14px 24px; font-size:14.5px" @click="router.push({ name: 'dashboard' })">
-              Explore the atlas
             </button>
           </div>
           <div style="display:flex; gap:24px; margin-top:48px; align-items:center">
@@ -117,7 +108,7 @@ const profile = useProfile()
         </div>
       </div>
 
-      <div class="card" style="padding:56px; margin-bottom:120px">
+      <div class="card" style="padding:56px; margin-bottom:80px">
         <div class="micro" style="margin-bottom:16px; color: var(--accent)">FROM THE RESEARCH</div>
         <p class="serif" style="font-size:30px; line-height:1.3; margin:0; max-width:880px; letter-spacing:-0.005em">
           <em>"The phenomenology of the moment is not what most people assume it to be. The first job is to take it seriously enough to look — carefully, and without theory."</em>
@@ -127,11 +118,8 @@ const profile = useProfile()
         </div>
       </div>
 
-      <div style="border-top:1px solid var(--border); padding-top:32px; display:flex; justify-content:space-between; color: var(--text-dim); font-size:12px">
-        <div class="mono">COGNITYPE · ATLAS OF THE INTERIOR · MMXXVI</div>
-        <div style="display:flex; gap:24px">
-          <span>Methodology</span><span>Research</span><span>Privacy</span><span>Contact</span>
-        </div>
+      <div style="border-top:1px solid var(--border); padding-top:32px; color: var(--text-dim); font-size:12px">
+        <div class="mono">COGNITYPE · ATLAS OF THE INTERIOR</div>
       </div>
     </div>
   </div>

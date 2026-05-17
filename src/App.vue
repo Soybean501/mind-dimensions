@@ -2,12 +2,9 @@
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
 import Sidebar from './components/Sidebar.vue'
-import TweaksPanel from './components/TweaksPanel.vue'
-import { useTweaks } from './composables/useTweaks'
 
 const route = useRoute()
-const t = useTweaks()
-const showSidebar = computed(() => t.showNav && !['landing','onboarding'].includes(route.name))
+const showSidebar = computed(() => route.name !== 'landing')
 </script>
 <template>
   <div style="display:flex; height:100vh; overflow:hidden; background: var(--bg-deep)">
@@ -19,7 +16,6 @@ const showSidebar = computed(() => t.showNav && !['landing','onboarding'].includ
         </transition>
       </RouterView>
     </main>
-    <TweaksPanel />
   </div>
 </template>
 <style>

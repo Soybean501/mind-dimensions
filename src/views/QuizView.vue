@@ -55,7 +55,6 @@ function setAnswer(v) { answers.value = { ...answers.value, [q.value.id]: v } }
           <div :style="{ height:'100%', width: (progress*100) + '%', background: 'linear-gradient(90deg, oklch(85% 0.14 ' + d.hue + '), oklch(82% 0.14 ' + d.hue + '))', transition: 'width 360ms cubic-bezier(.2,.7,.2,1)' }"/>
         </div>
       </div>
-      <button class="btn btn-ghost">Pause</button>
     </div>
 
     <div :key="q.id" class="fade-up" style="position:relative; z-index:1; flex:1; overflow:auto; padding:64px 56px; display:flex; align-items:center; justify-content:center">
@@ -75,13 +74,10 @@ function setAnswer(v) { answers.value = { ...answers.value, [q.value.id]: v } }
     </div>
 
     <div style="position:relative; z-index:1; padding:20px 56px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between">
-      <span class="mono" style="font-size:11px; color: var(--text-dim)">⏎ submit · ← back · → skip</span>
-      <div style="display:flex; gap:12px">
-        <button class="btn btn-ghost">Skip item</button>
-        <button class="btn btn-primary" @click="next" :disabled="!answered">
-          {{ idx < total-1 ? 'Next →' : 'See result →' }}
-        </button>
-      </div>
+      <span class="mono" style="font-size:11px; color: var(--text-dim)">⏎ submit · ← back</span>
+      <button class="btn btn-primary" @click="next" :disabled="!answered">
+        {{ idx < total-1 ? 'Next →' : 'See result →' }}
+      </button>
     </div>
   </div>
 </template>

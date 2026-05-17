@@ -21,7 +21,7 @@ const pct = computed(() => profile.percentiles[d.value.id])
         <span class="mono" style="color: var(--text-dim)">/</span>
         <span style="color: var(--text)">{{ d.name }}</span>
         <span class="mono" style="color: var(--text-dim); margin-left:auto">
-          DIMENSION 0{{ DIMENSIONS.indexOf(d)+1 }} OF 06
+          DIMENSION {{ String(DIMENSIONS.indexOf(d)+1).padStart(2,'0') }} OF {{ String(DIMENSIONS.length).padStart(2,'0') }}
         </span>
       </div>
 
@@ -55,14 +55,14 @@ const pct = computed(() => profile.percentiles[d.value.id])
             <line v-for="(t,i) in [-1,-0.66,-0.33,0,0.33,0.66,1]" :key="i" :x1="190+t*160" :y1="t===0 ? 178 : 184" :x2="190+t*160" :y2="t===0 ? 202 : 196" stroke="var(--text-dim)" stroke-width="0.8"/>
             <text x="30" y="220" text-anchor="start" fill="var(--text-mute)" style="font:500 10px var(--font-mono); letter-spacing:0.06em">LO</text>
             <text x="350" y="220" text-anchor="end" fill="var(--text-mute)" style="font:500 10px var(--font-mono); letter-spacing:0.06em">HI</text>
-            <g :transform="'translate(' + (190 + (score-0.5)*2*160) + ',190)'">
+            <g v-if="pct != null" :transform="'translate(' + (190 + (score-0.5)*2*160) + ',190)'">
               <circle r="42" :fill="'oklch(82% 0.14 ' + d.hue + ' / 0.18)'"/>
               <circle r="22" :fill="'oklch(82% 0.14 ' + d.hue + ' / 0.4)'"/>
               <circle r="6" :fill="'oklch(92% 0.14 ' + d.hue + ')'">
                 <animate attributeName="r" values="5.5;7;5.5" dur="3s" repeatCount="indefinite"/>
               </circle>
             </g>
-            <text :x="190 + (score-0.5)*2*160" y="118" text-anchor="middle" fill="var(--text)" style="font:500 10.5px var(--font-mono); letter-spacing:0.08em">YOU</text>
+            <text v-if="pct != null" :x="190 + (score-0.5)*2*160" y="118" text-anchor="middle" fill="var(--text)" style="font:500 10.5px var(--font-mono); letter-spacing:0.08em">YOU</text>
           </svg>
         </div>
       </div>
@@ -87,27 +87,10 @@ const pct = computed(() => profile.percentiles[d.value.id])
         </div>
         <ScaleMeter :value="score" :hue="d.hue" :loLabel="d.poles.lo.label" :hiLabel="d.poles.hi.label" :popMean="POPULATION[d.id].mean" :percentile="pct" :height="56"/>
         <hr class="rule" style="margin:32px 0"/>
-        <div style="display:grid; grid-template-columns:1fr 1.4fr; gap:40px">
-          <div>
-            <div class="micro" style="margin-bottom:10px">VS. POPULATION</div>
-            <DistributionCurve :value="score" :mean="POPULATION[d.id].mean" :sd="POPULATION[d.id].sd" :mode="POPULATION[d.id].mode" :hue="d.hue" :w="380" :h="100"/>
-            <div class="mono" style="font-size:11px; color: var(--text-dim); margin-top:8px">
-              · · · POPULATION MEAN ({{ Math.round(POPULATION[d.id].mean*100) }}) — YOU
-            </div>
-          </div>
-          <div>
-            <div class="micro" style="margin-bottom:10px">FACETS</div>
-            <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:12px">
-              <div v-for="(f,i) in d.facets" :key="f"
-                :style="{ display:'flex', alignItems:'center', gap:'12px', padding:'10px 0', borderTop: i>1 ? '1px solid var(--border)' : 'none' }">
-                <div style="width:60px; height:4px; background: var(--bg-elev); border-radius:4px; position:relative; overflow:hidden">
-                  <div :style="{ position:'absolute', left:0, top:0, bottom:0, width: (Math.max(0.1, Math.min(0.95, score + Math.sin(i*1.3)*0.1))*100) + '%', background: 'oklch(85% 0.14 ' + d.hue + ')' }"/>
-                </div>
-                <span style="font-size:13.5px">{{ f }}</span>
-                <span class="mono" style="margin-left:auto; color: var(--text-mute); font-size:11px">{{ Math.round(Math.max(0.1, Math.min(0.95, score + Math.sin(i*1.3)*0.1))*100) }}</span>
-              </div>
-            </div>
-          </div>
+        <div class="micro" style="margin-bottom:10px">VS. POPULATION</div>
+        <DistributionCurve :value="score" :mean="POPULATION[d.id].mean" :sd="POPULATION[d.id].sd" :mode="POPULATION[d.id].mode" :hue="d.hue" :w="1080" :h="140"/>
+        <div class="mono" style="font-size:11px; color: var(--text-dim); margin-top:8px">
+          · · · POPULATION MEAN ({{ Math.round(POPULATION[d.id].mean*100) }}) — YOU
         </div>
       </div>
 
@@ -142,10 +125,12 @@ const pct = computed(() => profile.percentiles[d.value.id])
 
       <div class="card" style="padding:28px; display:flex; align-items:center; gap:24px">
         <div style="flex:1">
-          <div class="serif" style="font-size:22px">Re-take {{ d.name }}</div>
-          <div style="color: var(--text-mute); font-size:13.5px">Six items · about 4 minutes. Your point on this axis may drift.</div>
+          <div class="serif" style="font-size:22px">
+            <template v-if="pct != null">Re-take {{ d.name }}</template>
+            <template v-else>Map {{ d.name }}</template>
+          </div>
+          <div style="color: var(--text-mute); font-size:13.5px">Six items · about 4 minutes.</div>
         </div>
-        <button class="btn" @click="router.push({ name: 'result', params: { id: d.id } })">See last result</button>
         <button class="btn btn-primary" @click="router.push({ name: 'quiz', params: { id: d.id } })">
           Begin assessment <span class="mono" style="opacity:0.5">→</span>
         </button>
