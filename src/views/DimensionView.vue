@@ -14,34 +14,34 @@ const score = computed(() => profile.scores[d.value.id])
 const pct = computed(() => profile.percentiles[d.value.id])
 </script>
 <template>
-  <div style="height:100%; overflow:auto; padding:32px 56px 80px">
-    <div style="max-width:1180px; margin:0 auto">
-      <div style="display:flex; align-items:center; gap:12px; color: var(--text-mute); font-size:13px; margin-bottom:32px">
+  <div style="height:100%; overflow:auto">
+    <div :style="{ maxWidth:'1180px', margin:'0 auto', padding:'var(--page-pad-y) var(--page-pad-x) var(--page-pad-bot)' }">
+      <div style="display:flex; align-items:center; gap:12px; color: var(--text-mute); font-size:13px; margin-bottom:24px; flex-wrap:wrap">
         <a @click="router.push({ name: 'dashboard' })" style="cursor:pointer; color:inherit">Atlas</a>
         <span class="mono" style="color: var(--text-dim)">/</span>
         <span style="color: var(--text)">{{ d.name }}</span>
         <span class="mono" style="color: var(--text-dim); margin-left:auto">
-          DIMENSION {{ String(DIMENSIONS.indexOf(d)+1).padStart(2,'0') }} OF {{ String(DIMENSIONS.length).padStart(2,'0') }}
+          {{ String(DIMENSIONS.indexOf(d)+1).padStart(2,'0') }} / {{ String(DIMENSIONS.length).padStart(2,'0') }}
         </span>
       </div>
 
-      <div style="display:grid; grid-template-columns:1fr 0.85fr; gap:64px; align-items:center; margin-bottom:64px">
+      <div :style="{ display:'grid', gridTemplateColumns:'var(--grid-dim-hero)', gap:'var(--col-gap-lg)', alignItems:'center', marginBottom:'var(--section-gap)' }">
         <div>
-          <div style="display:flex; align-items:center; gap:14px; margin-bottom:28px">
+          <div style="display:flex; align-items:center; gap:14px; margin-bottom:24px">
             <CodeBadge :code="d.code" :hue="d.hue" size="lg" />
             <span class="micro">{{ d.poles.lo.code }} ↔ {{ d.poles.hi.code }}</span>
           </div>
-          <h1 class="serif" style="margin:0; font-size:76px; line-height:0.96; font-weight:400; letter-spacing:-0.025em">
+          <h1 class="serif" :style="{ margin:0, fontSize:'var(--hero-lg)', lineHeight:0.98, fontWeight:400, letterSpacing:'-0.025em' }">
             {{ d.name }}<em :style="{ color: 'oklch(85% 0.14 ' + d.hue + ')' }">.</em>
           </h1>
-          <p class="serif" style="margin-top:24px; font-size:24px; color: var(--text-mute); line-height:1.4; max-width:540px">
+          <p class="serif" :style="{ marginTop:'20px', fontSize:'var(--h4)', color:'var(--text-mute)', lineHeight:1.4, maxWidth:'540px' }">
             <em>{{ d.tagline }}</em>
           </p>
-          <p style="margin-top:24px; font-size:16px; line-height:1.55; max-width:560px">
+          <p :style="{ marginTop:'20px', fontSize:'var(--copy-md)', lineHeight:1.55, maxWidth:'560px' }">
             {{ d.description }}
           </p>
         </div>
-        <div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; position:relative">
+        <div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; position:relative; max-width:380px; width:100%; justify-self:center">
           <svg viewBox="0 0 380 380" style="width:100%; max-width:380px">
             <defs>
               <radialGradient :id="'dorb-' + d.hue" cx="50%" cy="50%" r="50%">
@@ -67,44 +67,46 @@ const pct = computed(() => profile.percentiles[d.value.id])
         </div>
       </div>
 
-      <div class="card" style="padding:40px; margin-bottom:48px">
-        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:32px">
+      <div class="card" :style="{ padding:'var(--card-pad-lg)', marginBottom:'32px' }">
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:28px; gap:16px">
           <div>
-            <div class="micro" style="margin-bottom:8px">YOUR POSITION ON THIS AXIS</div>
-            <div class="serif" style="font-size:36px; font-weight:400">
+            <div class="micro" style="margin-bottom:8px">YOUR POSITION</div>
+            <div class="serif" :style="{ fontSize:'var(--h3)', fontWeight:400 }">
               <em v-if="pct != null" :style="{ color: 'oklch(85% 0.14 ' + d.hue + ')' }">{{ Math.round(score*100) }}</em>
               <em v-else style="color: var(--text-mute)">—</em>
-              <span style="color: var(--text-dim); font-size:24px"> / 100</span>
+              <span style="color: var(--text-dim); font-size:0.66em"> / 100</span>
             </div>
           </div>
           <div style="text-align:right">
             <div class="mono" style="font-size:11px; color: var(--text-dim)">POPULATION RANK</div>
-            <div class="serif" style="font-size:36px; font-weight:400">
+            <div class="serif" :style="{ fontSize:'var(--h3)', fontWeight:400 }">
               <template v-if="pct != null">p<em>{{ pct }}</em></template>
               <em v-else style="color: var(--text-mute)">—</em>
             </div>
           </div>
         </div>
-        <ScaleMeter :value="score" :hue="d.hue" :loLabel="d.poles.lo.label" :hiLabel="d.poles.hi.label" :popMean="POPULATION[d.id].mean" :percentile="pct" :height="56"/>
-        <hr class="rule" style="margin:32px 0"/>
+        <ScaleMeter :value="score" :hue="d.hue" :loLabel="d.poles.lo.label" :hiLabel="d.poles.hi.label" :popMean="POPULATION[d.id].mean" :percentile="pct" :height="48"/>
+        <hr class="rule" style="margin:28px 0"/>
         <div class="micro" style="margin-bottom:10px">VS. POPULATION</div>
-        <DistributionCurve :value="score" :mean="POPULATION[d.id].mean" :sd="POPULATION[d.id].sd" :mode="POPULATION[d.id].mode" :hue="d.hue" :w="1080" :h="140"/>
+        <div style="width:100%; overflow:hidden">
+          <DistributionCurve :value="score" :mean="POPULATION[d.id].mean" :sd="POPULATION[d.id].sd" :mode="POPULATION[d.id].mode" :hue="d.hue" :w="1080" :h="140"/>
+        </div>
         <div class="mono" style="font-size:11px; color: var(--text-dim); margin-top:8px">
           · · · POPULATION MEAN ({{ Math.round(POPULATION[d.id].mean*100) }}) — YOU
         </div>
       </div>
 
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-bottom:48px">
-        <div class="card" style="padding:36px">
+      <div :style="{ display:'grid', gridTemplateColumns:'var(--grid-2)', gap:'var(--col-gap-md)', marginBottom:'32px' }">
+        <div class="card" :style="{ padding:'var(--card-pad-md)' }">
           <div class="micro" style="margin-bottom:14px">WHAT THIS MEANS</div>
           <template v-if="pct != null">
-            <h3 class="serif" style="margin:0 0 12px; font-size:28px; font-weight:400">
+            <h3 class="serif" :style="{ margin:'0 0 12px', fontSize:'var(--h4)', fontWeight:400 }">
               You sit closer to the {{ score > 0.5 ? d.poles.hi.code.toLowerCase() : d.poles.lo.code.toLowerCase() }} pole.
             </h3>
             <p style="color: var(--text-mute); font-size:14.5px; line-height:1.6; margin:0">{{ interpretFor(d, score) }}</p>
           </template>
           <template v-else>
-            <h3 class="serif" style="margin:0 0 12px; font-size:28px; font-weight:400; color: var(--text-mute)">
+            <h3 class="serif" :style="{ margin:'0 0 12px', fontSize:'var(--h4)', fontWeight:400, color:'var(--text-mute)' }">
               Not yet mapped.
             </h3>
             <p style="color: var(--text-mute); font-size:14.5px; line-height:1.6; margin:0">
@@ -112,9 +114,9 @@ const pct = computed(() => profile.percentiles[d.value.id])
             </p>
           </template>
         </div>
-        <div class="card" style="padding:36px">
+        <div class="card" :style="{ padding:'var(--card-pad-md)' }">
           <div class="micro" :style="{ marginBottom:'14px', color: 'oklch(85% 0.14 ' + d.hue + ')' }">HOW WE MEASURED</div>
-          <h3 class="serif" style="margin:0 0 12px; font-size:28px; font-weight:400">
+          <h3 class="serif" :style="{ margin:'0 0 12px', fontSize:'var(--h4)', fontWeight:400 }">
             Six items, drawn from {{ d.research.split(';')[0].split(',')[0] }}.
           </h3>
           <p style="color: var(--text-mute); font-size:14.5px; line-height:1.6; margin:0">
@@ -123,9 +125,9 @@ const pct = computed(() => profile.percentiles[d.value.id])
         </div>
       </div>
 
-      <div class="card" style="padding:28px; display:flex; align-items:center; gap:24px">
-        <div style="flex:1">
-          <div class="serif" style="font-size:22px">
+      <div class="card" style="padding:24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap">
+        <div style="flex:1 1 220px; min-width:220px">
+          <div class="serif" style="font-size:20px">
             <template v-if="pct != null">Re-take {{ d.name }}</template>
             <template v-else>Map {{ d.name }}</template>
           </div>

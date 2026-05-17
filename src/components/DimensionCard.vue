@@ -6,8 +6,8 @@ const props = defineProps({ d: Object, score: Number, percentile: Number })
 const emit = defineEmits(['open'])
 </script>
 <template>
-  <button @click="emit('open')" class="card"
-    :style="{ padding:'28px', textAlign:'left', cursor:'pointer', background:'var(--bg-surface)', border:'1px solid var(--border)', borderRadius:'16px', position:'relative', overflow:'hidden' }">
+  <button @click="emit('open')" class="card dim-card"
+    :style="{ textAlign:'left', cursor:'pointer', background:'var(--bg-surface)', border:'1px solid var(--border)', borderRadius:'16px', position:'relative', overflow:'hidden' }">
     <div :style="{
       position:'absolute', top:'-80px', right:'-80px', width:'200px', height:'200px',
       borderRadius:'9999px',
@@ -33,3 +33,9 @@ const emit = defineEmits(['open'])
     <ScaleMeter :value="score" :hue="d.hue" :loLabel="d.poles.lo.code" :hiLabel="d.poles.hi.code" :popMean="POPULATION[d.id].mean" :height="36"/>
   </button>
 </template>
+<style scoped>
+.dim-card { padding: 24px; }
+@media (max-width: 768px) {
+  .dim-card { padding: 18px; }
+}
+</style>

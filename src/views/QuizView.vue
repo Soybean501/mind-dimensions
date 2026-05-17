@@ -33,22 +33,22 @@ function setAnswer(v) { answers.value = { ...answers.value, [q.value.id]: v } }
       <ConstellationField :density="0.5" :lines="false"/>
     </div>
 
-    <div style="position:relative; z-index:1; padding:24px 56px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:24px">
+    <div :style="{ position:'relative', zIndex:1, padding:'16px var(--page-pad-x)', borderBottom:'1px solid var(--border)', display:'flex', alignItems:'center', gap:'16px', flexWrap:'wrap' }">
       <button class="btn btn-ghost" @click="prev">← Back</button>
-      <div style="display:flex; align-items:center; gap:14px">
+      <div style="display:flex; align-items:center; gap:12px">
         <CodeBadge :code="d.code" :hue="d.hue" size="sm"/>
         <div>
           <div class="micro" style="margin-bottom:2px">ASSESSMENT</div>
-          <div class="serif" style="font-size:17px">{{ d.name }}</div>
+          <div class="serif" style="font-size:16px">{{ d.name }}</div>
         </div>
       </div>
-      <div style="flex:1; margin-left:24px">
+      <div style="flex:1; min-width:140px">
         <div style="display:flex; justify-content:space-between; margin-bottom:6px">
           <span class="mono" style="font-size:11px; color: var(--text-dim)">
             ITEM {{ String(idx+1).padStart(2,'0') }} / {{ String(total).padStart(2,'0') }}
           </span>
           <span class="mono" style="font-size:11px; color: var(--text-dim)">
-            ~{{ Math.max(1, Math.ceil((total-idx)*0.5)) }}M REMAINING
+            ~{{ Math.max(1, Math.ceil((total-idx)*0.5)) }}M
           </span>
         </div>
         <div style="height:2px; background: var(--border); border-radius:2px; overflow:hidden">
@@ -57,15 +57,15 @@ function setAnswer(v) { answers.value = { ...answers.value, [q.value.id]: v } }
       </div>
     </div>
 
-    <div :key="q.id" class="fade-up" style="position:relative; z-index:1; flex:1; overflow:auto; padding:64px 56px; display:flex; align-items:center; justify-content:center">
+    <div :key="q.id" class="fade-up" :style="{ position:'relative', zIndex:1, flex:1, overflow:'auto', padding:'40px var(--page-pad-x)', display:'flex', alignItems:'flex-start', justifyContent:'center' }">
       <div style="max-width:820px; width:100%">
-        <div class="micro" :style="{ marginBottom:'24px', color: 'oklch(85% 0.14 ' + d.hue + ')' }">{{ q.kind.toUpperCase() }} · ITEM {{ String(idx+1).padStart(2,'0') }}</div>
-        <h1 class="serif" style="margin:0; font-size:46px; line-height:1.15; font-weight:400; letter-spacing:-0.015em; max-width:760px">
+        <div class="micro" :style="{ marginBottom:'20px', color: 'oklch(85% 0.14 ' + d.hue + ')' }">{{ q.kind.toUpperCase() }} · ITEM {{ String(idx+1).padStart(2,'0') }}</div>
+        <h1 class="serif" :style="{ margin:0, fontSize:'var(--h2)', lineHeight:1.15, fontWeight:400, letterSpacing:'-0.015em', maxWidth:'760px' }">
           {{ q.prompt }}
         </h1>
-        <p v-if="q.sublabel" style="margin-top:20px; color: var(--text-mute); font-size:15px; max-width:540px">{{ q.sublabel }}</p>
+        <p v-if="q.sublabel" :style="{ marginTop:'18px', color:'var(--text-mute)', fontSize:'var(--copy-md)', maxWidth:'540px' }">{{ q.sublabel }}</p>
 
-        <div style="margin-top:56px">
+        <div style="margin-top:40px">
           <LikertScale v-if="q.kind === 'likert'" :value="answers[q.id]" @update:value="setAnswer" :hue="d.hue"/>
           <ForcedChoice v-else-if="q.kind === 'choice'" :options="q.options" :value="answers[q.id]" @update:value="setAnswer" :hue="d.hue"/>
           <CalibrationSlider v-else :value="answers[q.id]" @update:value="setAnswer" :anchors="q.anchors" :hue="d.hue"/>
@@ -73,9 +73,9 @@ function setAnswer(v) { answers.value = { ...answers.value, [q.value.id]: v } }
       </div>
     </div>
 
-    <div style="position:relative; z-index:1; padding:20px 56px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between">
-      <span class="mono" style="font-size:11px; color: var(--text-dim)">⏎ submit · ← back</span>
-      <button class="btn btn-primary" @click="next" :disabled="!answered">
+    <div :style="{ position:'relative', zIndex:1, padding:'16px var(--page-pad-x)', borderTop:'1px solid var(--border)', display:'flex', alignItems:'center', justifyContent:'space-between', gap:'12px' }">
+      <span class="mono desktop-only" style="font-size:11px; color: var(--text-dim)">⏎ submit · ← back</span>
+      <button class="btn btn-primary" style="margin-left:auto" @click="next" :disabled="!answered">
         {{ idx < total-1 ? 'Next →' : 'See result →' }}
       </button>
     </div>

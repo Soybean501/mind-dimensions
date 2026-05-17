@@ -18,7 +18,7 @@ const popPts = dims.map((d,i) => {
 const ringFrac = [0.25, 0.5, 0.75, 1.0]
 </script>
 <template>
-  <svg :width="size" :height="size" :viewBox="'0 0 ' + size + ' ' + size">
+  <svg :viewBox="'0 0 ' + size + ' ' + size" :style="{ width:'100%', height:'auto', maxWidth: size + 'px', display:'block' }">
     <defs>
       <radialGradient id="radarFill" cx="50%" cy="50%" r="50%">
         <stop offset="0%"  stop-color="oklch(82% 0.14 220 / 0.4)"/>

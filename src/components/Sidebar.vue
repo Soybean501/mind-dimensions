@@ -8,6 +8,7 @@ import { useProfile } from '../stores/profile'
 
 const route = useRoute()
 const profile = useProfile()
+const emit = defineEmits(['navigate'])
 
 const NAV = [
   { name: 'dashboard', label: 'Atlas' },
@@ -16,7 +17,7 @@ const NAV = [
 const showDimList = computed(() => ['dimension','quiz','result'].includes(route.name))
 </script>
 <template>
-  <aside style="width:240px; height:100%; border-right:1px solid var(--border); background: var(--bg-surface); display:flex; flex-direction:column; flex-shrink:0; z-index:5; position:relative">
+  <aside class="sidebar">
     <div style="padding: 20px 22px; border-bottom: 1px solid var(--border)">
       <Wordmark small />
     </div>
@@ -32,7 +33,7 @@ const showDimList = computed(() => ['dimension','quiz','result'].includes(route.
     <nav style="padding:12px 10px; flex:1; overflow:auto">
       <RouterLink v-for="n in NAV" :key="n.name"
         :to="{ name: n.name }" custom v-slot="{ navigate, isActive }">
-        <button @click="navigate" :style="{
+        <button @click="navigate(); emit('navigate')" :style="{
           display:'flex', alignItems:'center', gap:'10px', width:'100%', textAlign:'left',
           padding:'7px 12px', borderRadius:'8px', border:0,
           background: isActive ? 'var(--bg-elev)' : 'transparent',
@@ -53,7 +54,7 @@ const showDimList = computed(() => ['dimension','quiz','result'].includes(route.
         <div class="micro" style="margin-bottom:8px">SWITCH DIMENSION</div>
         <RouterLink v-for="d in DIMENSIONS" :key="d.id"
           :to="{ name: route.name, params: { id: d.id } }" custom v-slot="{ navigate }">
-          <button @click="navigate" style="display:flex; align-items:center; gap:8px; padding:6px 4px; width:100%; text-align:left; background:transparent; border:0; cursor:pointer; color: var(--text-mute); font-size:12.5px">
+          <button @click="navigate(); emit('navigate')" style="display:flex; align-items:center; gap:8px; padding:6px 4px; width:100%; text-align:left; background:transparent; border:0; cursor:pointer; color: var(--text-mute); font-size:12.5px">
             <GlowDot :size="5" :hue="d.hue" :intensity="0.7"/>
             {{ d.name }}
           </button>

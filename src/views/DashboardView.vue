@@ -8,20 +8,20 @@ const profile = useProfile()
 function openDimension(id) { router.push({ name: 'dimension', params: { id } }) }
 </script>
 <template>
-  <div style="height:100%; overflow:auto; padding:40px 56px 80px">
-    <div style="max-width:1280px; margin:0 auto">
-      <div style="margin-bottom:48px">
+  <div style="height:100%; overflow:auto">
+    <div :style="{ maxWidth:'var(--content-max)', margin:'0 auto', padding:'var(--page-pad-y) var(--page-pad-x) var(--page-pad-bot)' }">
+      <div style="margin-bottom:40px">
         <div class="micro" style="margin-bottom:12px">⊕ ATLAS · {{ profile.completed }}/{{ DIMENSIONS.length }} MAPPED</div>
-        <h1 class="serif" style="margin:0; font-size:52px; font-weight:400; letter-spacing:-0.02em; line-height:1">
+        <h1 class="serif" :style="{ margin:0, fontSize:'var(--h1)', fontWeight:400, letterSpacing:'-0.02em', lineHeight:1 }">
           <template v-if="profile.name">Welcome back, {{ profile.name.split(' ')[0] }}.</template>
           <template v-else>Your atlas, in one glance.</template>
         </h1>
-        <p style="margin:12px 0 0; color: var(--text-mute); font-size:17px; max-width:540px">
+        <p :style="{ margin:'12px 0 0', color:'var(--text-mute)', fontSize:'var(--copy-md)', maxWidth:'540px' }">
           Each dimension you map adds a star to your atlas. Open one to read its definition or take the assessment.
         </p>
       </div>
 
-      <div class="stagger" style="display:grid; grid-template-columns:repeat(2,1fr); gap:18px">
+      <div class="stagger" :style="{ display:'grid', gridTemplateColumns:'var(--grid-2)', gap:'var(--col-gap-sm)' }">
         <DimensionCard v-for="d in DIMENSIONS" :key="d.id" :d="d"
           :score="profile.scores[d.id]" :percentile="profile.percentiles[d.id]"
           @open="openDimension(d.id)" />
