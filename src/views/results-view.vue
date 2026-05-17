@@ -19,7 +19,7 @@ onMounted(() => {
   }
 })
 
-const { dimensionInterpretations, crossPatterns } = useInterpretation()
+const { dimensionInterpretations, archetypeMatches } = useInterpretation()
 
 function retake() {
   store.init()
@@ -32,8 +32,8 @@ function retake() {
     <h1 class="results-title">Your Mind Type Profile</h1>
     <p class="results-intro">
       Each bar shows your position on one dimension — left end is one pole, right end is
-      the other, midline is centre. Scores are based on mean option values across five
-      questions per dimension.
+      the other, midline is centre. Scores are normalised from the questions you answered
+      in each dimension.
     </p>
 
     <section class="results-bars">
@@ -61,8 +61,20 @@ function retake() {
     </section>
 
     <section class="results-patterns">
-      <h2>Cross-Dimension Patterns</h2>
-      <PatternCard v-for="p in crossPatterns" :key="p.id" :pattern="p" />
+      <h2>Your profile most resembles…</h2>
+      <p class="results-patterns-intro">
+        Your scores place you in a six-dimensional space rather than a single type. These
+        are the patterns your profile most closely resembles, ordered by how strongly
+        they fit. It's normal for more than one to apply.
+      </p>
+      <template v-if="archetypeMatches.length > 0">
+        <PatternCard v-for="p in archetypeMatches" :key="p.id" :pattern="p" />
+      </template>
+      <p v-else class="results-patterns-empty">
+        Your profile sits between the named patterns. That's a real cognitive
+        style of its own — flexible and context-dependent rather than strongly
+        biased toward any single mode.
+      </p>
     </section>
 
     <div class="results-actions">

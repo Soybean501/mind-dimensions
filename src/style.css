@@ -745,7 +745,23 @@ code {
 .results-patterns {
   margin-bottom: 40px;
 
-  h2 { margin-bottom: 16px; }
+  h2 { margin-bottom: 12px; }
+}
+
+.results-patterns-intro {
+  font-size: 14px;
+  line-height: 165%;
+  color: var(--text);
+  margin: 0 0 18px;
+}
+
+.results-patterns-empty {
+  font-size: 14px;
+  line-height: 165%;
+  color: var(--text);
+  padding: 14px 18px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
 }
 
 .pattern-card {
@@ -766,7 +782,16 @@ code {
     font-size: 14px;
     line-height: 165%;
     color: var(--text);
+    margin: 0 0 8px;
   }
+
+  p:last-child { margin-bottom: 0; }
+}
+
+.pattern-personalisation {
+  font-style: italic;
+  color: var(--text-h);
+  opacity: 0.85;
 }
 
 .results-actions {
