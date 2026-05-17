@@ -32,7 +32,7 @@ const path = parts.join(' ')
 const gid = 'dg-' + props.hue
 </script>
 <template>
-  <svg :width="w" :height="h" :viewBox="'0 0 ' + w + ' ' + h">
+  <svg :viewBox="'0 0 ' + w + ' ' + h" preserveAspectRatio="none" :style="{ width:'100%', height:'auto', display:'block', aspectRatio: w + ' / ' + h }">
     <defs>
       <linearGradient :id="gid" x1="0" x2="0" y1="0" y2="1">
         <stop offset="0%"  :stop-color="'oklch(82% 0.14 ' + hue + ' / 0.5)'"/>
